@@ -1,0 +1,62 @@
+
+# --- Trainer ---
+trainer:
+  timesteps: 200_000
+
+# --- PPO agent ---
+agent:
+  rollouts: 24
+  learning_epochs: 5
+  mini_batches: 4
+  discount_factor: 0.99
+  lambda: 0.95
+  learning_rate: 3.0e-4
+
+
+  #learning_rate_scheduler: KLAdaptiveLR
+    #kl_threshold: 0.008
+
+  learning_rate_scheduler: LinearLR
+  learning_rate_scheduler_kwargs:
+    start_factor: 1.0
+    end_factor: 0.1
+    total_iters: 20000
+
+
+  #learning_rate_scheduler: CosineAnnealingWarmRestarts
+  #learning_rate_scheduler_kwargs:
+  #  T_0: 150000      # long initial cycle to reach the LR peak
+  #  T_mult: 1        # subsequent cycles keep the same length
+  #  eta_min: 1.0e-5
+
+  # Custom scheduler:
+  #learning_rate_scheduler: WarmStartCosineRestarts
+  #learning_rate_scheduler_kwargs:
+  #  T_warm: 150000
+  #  T_restart: 50000
+  #  eta_min: 1.0e-5
+
+  #learning_rate_scheduler: null
+  #learning_rate_scheduler_kwargs: {}
+
+  ratio_clip: 0.2
+  value_clip: 0.2
+  grad_norm_clip: 1
+  clip_predicted_values: true
+  entropy_loss_scale: 0.01   # starting value, only used on the first step.
+                             # LinearEntropyDecay in ppo_snn.py drives it afterwards.
+  value_loss_scale: 0.5
+  kl_threshold: 0.0
+  state_preprocessor: RunningStandardScaler
+  state_preprocessor_kwargs:
+    size: null      # null -> params.py replaces it with env.observation_space
+    device: null    # null -> params.py replaces it with env.device
+  value_preprocessor: RunningStandardScaler
+  value_preprocessor_kwargs:
+    size: 1
+    device: null
+  experiment:
+    directory: logs/crazyflie_snn
+    experiment_name: ""
+    write_interval: 100
+    checkpoint_interval: 500

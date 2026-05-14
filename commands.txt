@@ -1,0 +1,77 @@
+Commands for training and testing the Crazyflie SNN agent
+==========================================================
+
+All commands assume:
+  - working directory: repo root
+  - active Python environment: env_isaaclab (with Isaac Lab and skrl installed)
+
+Hydra reads the configs in src/task/crazyflie/. Any value can be overridden on
+the command line with the syntax key=value (no leading dashes).
+
+
+TRAINING
+--------
+
+# Default training run (uses src/task/crazyflie/cfg.yaml + algorithm/ppo.yaml + net/snn.yaml + task/crazyflie.yaml)
+python main_hydra.py
+
+# Fewer parallel envs (lower VRAM)
+python main_hydra.py task.num_envs=64
+
+# Render the simulation during training (slower; useful for debugging)
+python main_hydra.py task.headless=false
+
+# Custom seed
+python main_hydra.py seed=123
+
+# Custom number of timesteps
+python main_hydra.py algorithm.trainer.timesteps=400000
+
+# Resume training from a checkpoint
+python main_hydra.py agent_path=logs/crazyflie_snn/<run_dir>/checkpoints/best_agent.pt
+
+# Enable wandb logging (replace PROJECT with your wandb project name)
+python main_hydra.py wandb=PROJECT
+
+# Switch network type to the MLP baseline
+python main_hydra.py net=snn        # default
+python main_hydra.py net.type=mlp   # ANN baseline
+
+# Tweak SNN hyperparameters from the CLI
+python main_hydra.py net.hidden_size=128 net.num_layers=2 net.beta=0.7 net.encoding=rate
+
+# Enable SNN-specific logging (firing rate, actions, decay/threshold)
+python main_hydra.py net_activity=true net_actions=true net_decay_threshold=true
+
+# Quick smoke run (4 envs, 64 timesteps, ~1 update)
+python main_hydra.py task.num_envs=4 task.headless=true algorithm.trainer.timesteps=64 algorithm.agent.rollouts=16
+
+
+TESTING / EVALUATION
+--------------------
+
+# Play with automatic checkpoint discovery (picks the most recent best_agent.pt under logs/)
+python play.py
+
+# Play with a specific checkpoint
+python play.py agent_path=logs/crazyflie_snn/<run_dir>/checkpoints/best_agent.pt
+
+# Play with the global best checkpoint stored under checkpoints/
+python play.py agent_path=checkpoints/best_agent.pt
+
+
+TENSORBOARD
+-----------
+
+# Visualize the training curves
+tensorboard --logdir logs/crazyflie_snn
+
+
+NOTES
+-----
+
+- Hydra writes its outputs (resolved configs, .hydra/) under outputs/<date>/<time>/.
+- Each training run creates its own folder under logs/crazyflie_snn/<timestamp>_PPO_SNN/
+  containing the saved YAMLs, TensorBoard events, and checkpoints/.
+- play.py forces single-GPU D3D12 rendering because Isaac Sim 5.1 crashes on
+  GUI start when Vulkan + multi-GPU are enabled on this machine.

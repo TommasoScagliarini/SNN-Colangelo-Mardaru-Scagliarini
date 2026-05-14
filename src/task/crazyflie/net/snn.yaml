@@ -1,0 +1,28 @@
+# --- Network type ---
+# "snn" for a Spiking Neural Network, "mlp" for an ANN baseline.
+type: snn
+
+# --- I/O sizes ---
+# Fixed by IsaacLab's QuadcopterEnv.
+obs_size: 12      # pos_error(3) + quat_xyz(3) + linear_vel(3) + ang_vel(3);
+act_size: 4       # thrust(1) + moment_xyz(3)
+
+# --- Architecture ---
+hidden_size: 256       # neurons per hidden layer
+num_layers: 1          # number of LIF layers
+sequence_length: 4     # sequence length used by PPO_RNN
+
+# --- SNN parameters ---
+beta: 0.5         # membrane decay rate (0 = no memory, 1 = infinite memory).
+
+threshold: 0.5          # spike threshold of the LIF neurons.
+reset_mechanism: zero   # "subtract" or "zero"
+
+# --- Spike encoding (continuous obs -> spikes) ---
+encoding: latency        # "rate", "latency", or "direct".
+encoding_timesteps: 1    # how many timesteps to encode a single observation.
+
+# --- Initialization ---
+learn_beta: false         # if true, beta becomes a learnable parameter.
+learn_threshold: false    # if true, threshold becomes a learnable parameter.
+

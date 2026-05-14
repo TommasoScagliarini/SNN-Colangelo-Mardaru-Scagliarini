@@ -1,0 +1,20 @@
+
+name: Isaac-Quadcopter-Direct-v0
+# --- Parallelism ---
+num_envs: 4096          # parallel environments on the GPU.
+
+# --- Rendering ---
+headless: true         # false to visualize, true for training.
+force_render: false    # true forces rendering even in headless mode (visual debugging).
+
+# --- Reference values (read-only, they do not affect the env) ---
+# The values below are defined in IsaacLab's Python sources; they are repeated
+# here only for quick reference.
+
+# episode_length_s: 10.0   -> 10 seconds per episode
+# decimation: 2            -> policy is called every 2 physics steps
+# sim_dt: 0.005            -> physics dt = 1/200 s
+# policy_dt: 0.01          -> policy dt = decimation * sim_dt
+# observation_space: 12    -> [pos_error(3), quat(4), vel(3), ang_vel(3)] - 1 = 12
+# action_space: 4          -> [thrust(1), moment_x(1), moment_y(1), moment_z(1)]
+

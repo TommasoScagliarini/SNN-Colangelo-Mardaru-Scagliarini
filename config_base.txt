@@ -1,0 +1,22 @@
+Timesteps: 200000
+Rollouts: 24
+Learning epochs: 5 
+minibatches: 4
+Learning Rate: 3e-4
+learning_rate_scheduler: LinearLR
+  learning_rate_scheduler_kwargs:    
+    start_factor: 1.0                
+    end_factor: 0.1
+    total_iters: 20000
+num_envs: 4096
+beta: 0.5
+threshold: 0.5
+encoding: direct
+reset_mechanism: zero
+encoding_timesteps: 1
+learn_beta: false
+learn_threshold: true
+
+num_layers:1
+hidden_size:256
+sequence_length: 4

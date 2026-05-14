@@ -1,0 +1,29 @@
+defaults:
+  - _self_
+  - task: crazyflie
+  - net: snn
+  - algorithm: ppo
+
+# --- Experiment ---
+seed: 42
+prefix: ""
+root_path: ""
+
+# --- Logging ---
+wandb: null              
+wandb_verbose: false     
+
+# --- SNN debug ---
+net_activity: false         # log LIF firing rates
+net_actions: false          # log SNN input/output
+net_decay_threshold: false  # log beta and threshold during training
+
+# --- Checkpointing ---
+agent_path: null   # null disables automatic checkpoint loading at training time
+#agent_path: "checkpoints/best_agent.pt"
+#agent_path: "logs/crazyflie_snn/26-03-21_19-45-03-031159_PPO_SNN/checkpoints/best_agent.pt"
+
+# --- Device ---
+sim_device: "cuda:0"
+rl_device: "cuda:0"
+graphics_device_id: 0
