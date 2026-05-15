@@ -66,12 +66,3 @@ TENSORBOARD
 # Visualize the training curves
 tensorboard --logdir logs/crazyflie_snn
 
-
-NOTES
------
-
-- Hydra writes its outputs (resolved configs, .hydra/) under outputs/<date>/<time>/.
-- Each training run creates its own folder under logs/crazyflie_snn/<timestamp>_PPO_SNN/
-  containing the saved YAMLs, TensorBoard events, and checkpoints/.
-- play.py forces single-GPU D3D12 rendering because Isaac Sim 5.1 crashes on
-  GUI start when Vulkan + multi-GPU are enabled on this machine.
